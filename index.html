@@ -1,0 +1,99 @@
+<!doctype html><html dir="rtl" lang="ar"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>تحدي القرية الآمنة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%;background:#0f2a1d}
+body{font-family:Cairo,Tahoma,sans-serif;color:#fff;background:linear-gradient(180deg,#134e3a,#0f2a1d 60%,#0a1d14);padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0);overflow-x:hidden}
+#app{max-width:560px;margin:0 auto;padding:14px;min-height:100vh;display:flex;flex-direction:column}
+.top{display:flex;justify-content:space-between;align-items:center;font-weight:900;font-size:17px;gap:6px}
+.pill{background:#ffffff22;border-radius:20px;padding:3px 12px}
+.bar{height:10px;background:#ffffff22;border-radius:8px;margin:8px 0;overflow:hidden}
+.bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#ffd54f,#ff7043);border-radius:8px;transition:width .1s linear}
+.prog{height:6px;background:#ffffff22;border-radius:6px;overflow:hidden}.prog i{display:block;height:100%;background:#66bb6a;width:0;transition:width .4s}
+.q{background:#ffffff14;border:2px solid #ffffff33;border-radius:18px;padding:16px;margin:12px 0;font-size:20px;font-weight:700;line-height:1.6;text-align:center;animation:pop .35s}
+.q small{display:block;font-size:13px;color:#ffd54f;margin-bottom:4px}
+.opt{display:block;width:100%;margin:8px 0;padding:13px;border:0;border-radius:14px;font:700 17px Cairo,Tahoma,sans-serif;color:#fff;background:#2e7d5b;box-shadow:0 4px 0 #1b5740;cursor:pointer;transition:transform .1s}
+.opt:active{transform:translateY(3px);box-shadow:0 1px 0 #1b5740}
+.opt:nth-child(2){background:#3f6fc0;box-shadow:0 4px 0 #284a85}.opt:nth-child(3){background:#c77d1c;box-shadow:0 4px 0 #8a5510}.opt:nth-child(4){background:#9b4bb0;box-shadow:0 4px 0 #6b2f7c}
+.opt.ok{background:#2e9e4f!important;box-shadow:0 4px 0 #1b6b33!important;animation:pop .4s}
+.opt.no{background:#c62828!important;box-shadow:0 4px 0 #7f1717!important;animation:shake .4s}
+.opt.off{opacity:.25;pointer-events:none}
+.note{background:#fff8e1;color:#4a3b00;border-radius:12px;padding:8px 12px;margin:6px 0;font-size:15px;display:none}
+.go{background:#ffd54f;color:#3b2f00;border:0;border-radius:30px;padding:12px 28px;font:900 18px Cairo,Tahoma,sans-serif;box-shadow:0 4px 0 #b28704;cursor:pointer;margin:8px auto;display:none}
+.tools{display:flex;gap:8px;justify-content:center;margin-top:auto;padding-top:10px}
+.tools button{background:#ffffff22;border:0;color:#fff;border-radius:20px;padding:6px 14px;font:700 14px Cairo,Tahoma,sans-serif}
+.center{text-align:center;margin:auto 0}
+.center h1{font-size:34px;margin:6px 0;font-weight:900}.center p{font-size:16px;line-height:1.7;color:#d7f0e2}
+.big{font-size:70px;animation:float 2.5s infinite ease-in-out}
+.rev{background:#ffffff14;border-radius:12px;padding:8px 12px;margin:6px 0;text-align:right;font-size:14px}.rev b{color:#ffd54f}
+.fx{position:fixed;bottom:30%;font-size:30px;pointer-events:none;animation:up 1.2s forwards;z-index:9}
+@keyframes up{to{transform:translateY(-220px) rotate(40deg);opacity:0}}
+@keyframes pop{0%{transform:scale(.9);opacity:.4}100%{transform:scale(1);opacity:1}}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes float{50%{transform:translateY(-10px)}}
+</style></head><body><div id="app"></div>
+<script>
+const Q=[
+["معنى «رغدًا» في الآية؟","رزقًا واسعًا هنيئًا سهلًا",["مكانًا بعيدًا","خوفًا شديدًا","علمًا نافعًا"]],
+["معنى «أُهِلّ لغير الله به»؟","ما ذُبح قربانًا لغير الله",["ما مات حتف أنفه","ما صِيد في البحر","ما ذُبح بسكين حادة"]],
+["معنى «باغ» في قوله ﴿غير باغ ولا عاد﴾؟","راغب في المحرّم لذاته",["مسافر بعيد","جائع جدًا","عالم بالحكم"]],
+["معنى «عاد» في الآية؟","متجاوز لحدّ الحاجة",["راجع إلى بيته","تائب إلى ربه","مُنكر للنعمة"]],
+["كيف وصف الله القرية التي ضرب بها المثل؟","آمنة مطمئنة يأتيها رزقها رغدًا",["بعيدة عن الناس","فقيرة قليلة الرزق","كثيرة الحروب"]],
+["بماذا كفرت القرية؟","بأنعم الله",["بالأنهار","بالجبال","بالسفر"]],
+["ماذا أذاقها الله بسبب كفرها؟","لباس الجوع والخوف",["لباس الحرير","شدة البرد","كثرة المال"]],
+["ما سبب تبديل حال القرية من النعمة إلى الجوع والخوف؟","تكذيبهم للرسول وكفرهم بالنعمة",["قلة الأمطار فقط","كثرة السفر","ضعف التجارة"]],
+["أيّ هذه الأطعمة ليس من المحرمات في آيات الدرس؟","السمك",["الميتة","الدم المسفوح","لحم الخنزير"]],
+["ما المقصود بالدم المحرّم في آيات الدرس؟","الدم المسفوح الذي يخرج عند الذبح",["كل دم في الجسم","الدم الباقي في العروق واللحم","دم السمك"]],
+["ما الميتتان اللتان استثناهما الرسول ﷺ؟","السمك والجراد",["الغنم والإبل","الأرنب والدجاج","الحوت والبقر"]],
+["ما الدمان اللذان استثناهما الرسول ﷺ؟","الكبد والطحال",["القلب والرئة","الكلية والمعدة","الدماغ والعين"]],
+["ما الأصل في الأطعمة؟","الإباحة",["التحريم","الكراهة","التوقف"]],
+["ما القاعدة الفقهية في رخصة أكل المحرم؟","الضرورات تبيح المحظورات",["المشقة تجلب الشدة","اليقين يزول بالشك","الأمور بمقاصدها"]],
+["متى يجوز للمضطر أكل المحرم؟","بالقدر الذي يزيل حالة الاضطرار فقط",["حتى يشبع تمامًا","متى أراد ذلك","مع الرغبة في المحرم"]],
+["ما وجه خطورة الإفتاء بغير علم؟","أنه كذب على الله تعالى",["أنه مجرد خطأ بسيط","أنه يضيّع الوقت","أنه يخالف العادات"]],
+["بحسب الآيات، ما مصير الذين يفترون على الله الكذب؟","لا يفلحون، ومتاعهم قليل ولهم عذاب أليم",["يفلحون في الدنيا","يغفر لهم دائمًا","لا حساب عليهم"]],
+["لمن نسأل في أمور ديننا؟","أهل العلم الموثوقين",["أي شخص","مواقع التواصل فقط","من يوافق هوانا"]],
+["أيّ الأطعمة الأربعة المحرمة أخبثها وأشدها؟","ما أُهِلّ لغير الله به",["الميتة","الدم","لحم الخنزير"]],
+["أيّ الأطعمة الأربعة المحرمة أخفّها تحريمًا؟","الميتة",["الدم","ما أُهِلّ لغير الله به","كلها متساوية"]],
+["من أركان شكر النعمة: الشكر بالقلب، وباللسان، و…؟","بالجوارح باستعمال النعم في طاعة الله",["بالمال فقط","بالصمت","بالفخر بها"]],
+["ما عاقبة كفران النعمة؟","جزاء دنيوي عاجل وعذاب في الآخرة أشد",["زيادة النعم","الأجر الكبير","لا شيء"]],
+["لماذا قدّم القرآن «آمنة» على «مطمئنة»؟","لأن الطمأنينة لا تحصل دون أمن",["لأن الكلمة أقصر","لأنها أجمل","بلا سبب"]],
+["ما المعيار الثابت في الرسل الذين ذُكروا في الآيات؟","أن يكونوا من قومهم يعرفون صدقهم وأمانتهم",["أن يكونوا غرباء","أن يكونوا من الملوك","أن يأتوا بلا لغة قومهم"]],
+["أيهما أشدّ عند بعض أهل العلم؟","تحريم الحلال، لأن الأصل الإباحة والله يحب التيسير",["تحليل الحرام فقط","هما متساويان دائمًا","لا فرق عند أحد"]],
+["ما الحكم الذي يُلاحظ في المدّ المنفصل (أجوّد تلاوتي)؟","يُمدّ حرف المد بمقدار حركتين أو أربع",["لا يُمدّ أبدًا","يُمدّ ست حركات","يُحذف حرف المد"]],
+];
+const $=s=>document.querySelector(s),app=$('#app');
+let AC=null,snd=true,speak=true,st={};
+function ctx(){try{if(!AC)AC=new (window.AudioContext||window.webkitAudioContext)();if(AC.state==='suspended')AC.resume()}catch(e){}return AC}
+function tone(f,t,d,type='sine',v=.18){if(!snd)return;const c=ctx();if(!c)return;const o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.value=f;const s=c.currentTime+t;g.gain.setValueAtTime(v,s);g.gain.exponentialRampToValueAtTime(.001,s+d);o.connect(g);g.connect(c.destination);o.start(s);o.stop(s+d)}
+const sfx={ok(n){[523,659,784,1047].slice(0,Math.min(4,2+n)).forEach((f,i)=>tone(f,i*.08,.25,'triangle'))},no(){tone(180,0,.35,'sawtooth',.15);tone(130,.12,.4,'sawtooth',.15)},tick(){tone(900,0,.06,'square',.06)},win(){[523,659,784,1047,784,1047,1319].forEach((f,i)=>tone(f,i*.13,.3,'triangle'))},lose(){[392,330,262,196].forEach((f,i)=>tone(f,i*.2,.4,'sawtooth',.12))},click(){tone(600,0,.05,'square',.05)}};
+const sh=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+function fx(e){for(let i=0;i<6;i++){const d=document.createElement('div');d.className='fx';d.textContent=e;d.style.left=(10+Math.random()*80)+'%';d.style.animationDelay=Math.random()*.3+'s';document.body.appendChild(d);setTimeout(()=>d.remove(),1700)}}
+function best(){try{return +localStorage.getItem('nahl_best')||0}catch(e){return 0}}
+function saveBest(v){try{localStorage.setItem('nahl_best',v)}catch(e){}}
+function home(){clearInterval(st.t);app.innerHTML=`<div class="center"><div class="big">🏡</div><h1>تحدي القرية الآمنة</h1><p>سورة النحل (١١٢–١١٧)<br>أجب قبل انتهاء الوقت، وحافظ على قلوبك ❤️❤️❤️<br>كل إجابة صحيحة متتالية تضاعف نقاطك 🔥</p><p>أفضل نتيجة: <b>${best()}</b></p><button class="go" style="display:block" id="st">ابدأ التحدي 🚀</button></div><div class="tools"><button id="sn">🔊 الصوت</button></div>`;$('#st').onclick=()=>{ctx();sfx.click();start()};$('#sn').onclick=e=>{snd=!snd;e.target.textContent=snd?'🔊 الصوت':'🔇 الصوت'}}
+function start(){st={q:sh(Q).slice(0,15),i:0,score:0,lives:3,streak:0,miss:[],f:true,max:0};show()}
+function show(){clearInterval(st.t);if(st.i>=st.q.length||st.lives<=0)return end();const [q,a,w]=st.q[st.i];st.opts=sh([a,...w]);st.ans=a;st.lock=false;st.time=20;
+app.innerHTML=`<div class="top"><span class="pill">❤️`.concat(`${'❤️'.repeat(st.lives)}`.slice(2),`</span><span class="pill">⭐ <span id="sc">${st.score}</span></span><span class="pill" id="sk">🔥 ${st.streak}</span></div>
+<div class="bar"><i id="tb"></i></div><div class="prog"><i style="width:${st.i/st.q.length*100}%"></i></div>
+<div class="q"><small>السؤال ${st.i+1} من ${st.q.length}</small>${q}</div>
+<div id="os">${st.opts.map((o,k)=>`<button class="opt" data-k="${k}">${o}</button>`).join('')}</div>
+<div class="note" id="nt"></div><button class="go" id="nx">التالي ⬅️</button>
+<div class="tools"><button id="h5">✂️ احذف خيارين</button><button id="sn">${snd?'🔊':'🔇'}</button></div>`);
+document.querySelectorAll('.opt').forEach(b=>b.onclick=()=>pick(b));$('#nx').onclick=()=>{sfx.click();st.i++;show()};
+$('#h5').onclick=()=>{if(st.lock||st.used)return;st.used=1;$('#h5').style.opacity=.3;sfx.click();let n=0;document.querySelectorAll('.opt').forEach(b=>{if(n<2&&b.textContent!==st.ans){b.classList.add('off');n++}})};
+$('#sn').onclick=e=>{snd=!snd;e.target.textContent=snd?'🔊':'🔇'};
+st.t=setInterval(()=>{st.time-=.1;$('#tb').style.width=Math.max(0,st.time/20*100)+'%';if(st.time<=5&&Math.abs(st.time-Math.round(st.time))<.06)sfx.tick();if(st.time<=0){clearInterval(st.t);pick(null)}},100)}
+function pick(b){if(st.lock)return;st.lock=true;clearInterval(st.t);const right=b&&b.textContent===st.ans;
+document.querySelectorAll('.opt').forEach(x=>{if(x.textContent===st.ans)x.classList.add('ok');x.style.pointerEvents='none'});
+if(right){st.streak++;st.max=Math.max(st.max,st.streak);const m=Math.min(st.streak,4);st.score+=10*m+Math.round(st.time/2);sfx.ok(st.streak);fx(['🌾','⭐','🌟','🔥'][m-1]);$('#nt').innerHTML='✅ أحسنت! الإجابة: '+st.ans}
+else{if(b)b.classList.add('no');st.streak=0;st.lives--;st.miss.push(st.q[st.i]);sfx.no();if(navigator.vibrate)navigator.vibrate(200);$('#nt').innerHTML=(b?'❌ ':'⏰ انتهى الوقت! ')+'الإجابة الصحيحة: <b>'+st.ans+'</b>'}
+$('#sc').textContent=st.score;$('#sk').textContent='🔥 '+st.streak;$('#nt').style.display='block';$('#nx').style.display='block';$('#nx').textContent=(st.lives<=0||st.i>=st.q.length-1)?'النتيجة 🏆':'التالي ⬅️'}
+function end(){clearInterval(st.t);const won=st.lives>0,nb=st.score>best();if(nb)saveBest(st.score);won?sfx.win():sfx.lose();if(won)fx('🎉');
+const stars=won?(st.lives==3?3:st.lives==2?2:1):0;
+app.innerHTML=`<div class="center"><div class="big">${won?'🏆':'🥀'}</div><h1>${won?'مبروك! حميت القرية':'سقطت القرية!'}</h1><p>${'⭐'.repeat(stars)||'حاول مرة ثانية'}<br>النقاط: <b>${st.score}</b>${nb?' 🎉 رقم قياسي جديد!':''}<br>أطول سلسلة 🔥 ${st.max}</p>
+${st.miss.length?'<p><b>راجع أخطاءك:</b></p>'+st.miss.map(m=>`<div class="rev">${m[0]}<br><b>${m[1]}</b></div>`).join(''):'<p>ما أخطأت ولا سؤال، ممتاز!</p>'}
+<button class="go" style="display:block" id="ag">العب مرة ثانية 🔁</button></div>`;$('#ag').onclick=()=>{sfx.click();start()}}
+home();
+</script></body></html>
